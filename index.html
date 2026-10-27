@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090b10">
+<title>LumiPlay</title>
+
+<style>
+:root {
+  --bg: #090b10;
+  --card: #171b26;
+  --purple: #8b5cf6;
+  --text: #f7f7fb;
+  --muted: #a6adbd;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 5%;
+  border-bottom: 1px solid #272b38;
+  background: #0d1018;
+}
+
+.logo {
+  font-size: 27px;
+  font-weight: bold;
+}
+
+.logo span {
+  color: var(--purple);
+}
+
+nav {
+  display: flex;
+  gap: 18px;
+}
+
+nav a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+nav a:hover {
+  color: white;
+}
+
+.hero {
+  padding: 65px 6%;
+  background:
+    radial-gradient(ellipse at 80% 20%, #683bbd55, transparent 50%),
+    linear-gradient(120deg, #1d1630, #0c1019);
+}
+
+.hero small {
+  color: #c4b5fd;
+  letter-spacing: 2px;
+  font-weight: bold;
+}
+
+.hero h1 {
+  font-size: clamp(35px, 6vw, 58px);
+  max-width: 650px;
+  margin: 18px 0;
+}
+
+.hero p {
+  color: var(--muted);
+  max-width: 500px;
+  line-height: 1.7;
+  margin-bottom: 25px;
+}
+
+button {
+  cursor: pointer;
+  border: 0;
+  border-radius: 8px;
+  padding: 12px 17px;
+  font-weight: bold;
+}
+
+.primary {
+  background: var(--purple);
+  color: white;
+}
+
+main {
+  padding: 35px 5%;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+input, select {
+  background: var(--card);
+  color: white;
+  border: 1px solid #34394a;
+  border-radius: 8px;
+  padding: 13px;
+}
+
+input {
+  flex: 1;
+  min-width: 180px;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid #292e3c;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.poster {
+  min-height: 130px;
+  aspect-ratio: 16 / 10;
+  display: grid;
+  place-items: center;
+  font-size: 48px;
+  background: linear-gradient(135deg, #49326c, #171b26);
+}
+
+.poster.blue {
+  background: linear-gradient(135deg, #164d69, #171b26);
+}
+
+.poster.red {
+  background: linear-gradient(135deg, #71314b, #171b26);
+}
+
+.poster.gold {
+  background: linear-gradient(135deg, #6a5428, #171b26);
+}
+
+.info {
+  padding: 14px;
+}
+
+.info h3 {
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.info p {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.info button {
+  width: 100%;
+  background: #302449;
+  color: white;
+  border: 1px solid #554078;
+}
+
+.info button:hover {
+  background: var(--purple);
+}
+
+#empty {
+  display: none;
+  color: var(--muted);
+  margin: 20px 0;
+}
+
+.note {
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+footer {
+  padding: 25px 5%;
+  border-top: 1px solid #292e3c;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background: #000e;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+
+.modal.open {
+  display: flex;
+}
+
+.player-box {
+  width: min(800px, 100%);
+  background: var(--card);
+  border-radius: 12px;
+  padding: 18px;
+}
+
+.player-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.close {
+  background: #34394a;
+  color: white;
+}
+
+video {
+  width: 100%;
+  background: black;
+  border-radius: 8px;
+}
+
+@media (max-width: 750px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  header {
+    padding: 17px 4%;
+  }
+
+  nav {
+    gap: 10px;
+  }
+
+  nav a {
+    font-size: 12px;
+  }
+
+  main {
+    padding: 25px 4%;
+  }
+
+  .hero {
+    padding: 45px 5%;
+  }
+}
+
+@media (max-width: 350px) {
+  nav {
+    gap: 6px;
+  }
+
+  nav a {
+    font-size: 10px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">Lumi<span>Play</span></div>
+  <nav>
+    <a href="#inicio">Início</a>
+    <a href="#catalogo">Catálogo</a>
+    <a href="#canais">Canais</a>
+  </nav>
+</header>
+
+<section class="hero" id="inicio">
+  <small>SEU PRÓXIMO PLAY COMEÇA AQUI</small>
+  <h1>Seu entretenimento em um só lugar.</h1>
+  <p>
+    Descubra uma experiência de streaming moderna.
+    Explore o catálogo de demonstração do LumiPlay.
+  </p>
+  <button class="primary" onclick="irCatalogo()">
+    Explorar catálogo
+  </button>
+</section>
+
+<main id="catalogo">
+
+  <div class="filters">
+    <input
+      id="search"
+      type="search"
+      placeholder="Buscar filmes, séries e canais..."
+      aria-label="Buscar conteúdo"
+    >
+
+    <select id="category" aria-label="Filtrar conteúdo">
+      <option value="todos">Todas as categorias</option>
+      <option value="filme">Filmes</option>
+      <option value="serie">Séries</option>
+      <option value="canal">Canais de demonstração</option>
+    </select>
+  </div>
+
+  <h2>Destaques para você</h2>
+  <div class="grid" id="grid"></div>
+  <p id="empty">Nenhum resultado encontrado.</p>
+
+  <section id="canais">
+    <h2>Canais de demonstração</h2>
+    <p class="note">
+      Estes canais são exemplos ilustrativos.
+      Para exibir transmissões reais, utilize fontes próprias
+      ou conteúdo cuja distribuição você esteja autorizado a fazer.
+    </p>
+    <div class="grid" id="channels"></div>
+  </section>
+
+</main>
+
+<footer>
+  <strong>LumiPlay</strong> — Protótipo de streaming.<br>
+  Esta versão não possui cadastro de usuários, assinaturas,
+  pagamentos ou catálogo licenciado. Os títulos são fictícios
+  e o vídeo é usado apenas para demonstração.
+</footer>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <div class="player-box">
+    <div class="player-top">
+      <h2 id="playerTitle">Reprodutor</h2>
+      <button class="close" onclick="fecharPlayer()">Fechar ✕</button>
+    </div>
+
+    <video id="video" controls playsinline>
+      Seu navegador não suporta vídeo.
+    </video>
+
+    <p class="note" style="margin-top:12px">
+      Vídeo de demonstração, não o conteúdo real do título selecionado.
+    </p>
+  </div>
+</div>
+
+<script>
+const videoDemo =
+  "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+
+const conteudos = [
+  {
+    nome: "Aventura Cósmica",
+    tipo: "filme",
+    genero: "Aventura",
+    icone: "🚀",
+    cor: "",
+    descricao: "Filme fictício"
+  },
+  {
+    nome: "Mistérios da Cidade",
+    tipo: "serie",
+    genero: "Drama",
+    icone: "🌃",
+    cor: "blue",
+    descricao: "Série fictícia"
+  },
+  {
+    nome: "O Último Horizonte",
+    tipo: "filme",
+    genero: "Ficção",
+    icone: "🌌",
+    cor: "red",
+    descricao: "Filme fictício"
+  },
+  {
+    nome: "Planeta Selvagem",
+    tipo: "serie",
+    genero: "Natureza",
+    icone: "🌿",
+    cor: "gold",
+    descricao: "Série fictícia"
+  },
+  {
+    nome: "Viagem ao Futuro",
+    tipo: "filme",
+    genero: "Ficção",
+    icone: "🪐",
+    cor: "blue",
+    descricao: "Filme fictício"
+  },
+  {
+    nome: "Código Secreto",
+    tipo: "serie",
+    genero: "Suspense",
+    icone: "🔐",
+    cor: "red",
+    descricao: "Série fictícia"
+  },
+  {
+    nome: "Mundo dos Oceanos",
+    tipo: "filme",
+    genero: "Documentário",
+    icone: "🌊",
+    cor: "blue",
+    descricao: "Filme fictício"
+  },
+  {
+    nome: "Lendas da Montanha",
+    tipo: "serie",
+    genero: "Aventura",
+    icone: "🏔️",
+    cor: "gold",
+    descricao: "Série fictícia"
+  }
+];
+
+const canais = [
+  {
+    nome: "LumiPlay Cinema",
+    tipo: "canal",
+    genero: "Cinema demo",
+    icone: "🎬",
+    cor: "red",
+    descricao: "Canal demonstrativo"
+  },
+  {
+    nome: "LumiPlay Natureza",
+    tipo: "canal",
+    genero: "Documentários demo",
+    icone: "🌎",
+    cor: "blue",
+    descricao: "Canal demonstrativo"
+  },
+  {
+    nome: "LumiPlay Kids",
+    tipo: "canal",
+    genero: "Infantil demo",
+    icone: "🧸",
+    cor: "gold",
+    descricao: "Canal demonstrativo"
+  },
+  {
+    nome: "LumiPlay Música",
+    tipo: "canal",
+    genero: "Música demo",
+    icone: "🎵",
+    cor: "",
+    descricao: "Canal demonstrativo"
+  }
+];
+
+const grid = document.getElementById("grid");
+const channelGrid = document.getElementById("channels");
+const search = document.getElementById("search");
+const category = document.getElementById("category");
+const empty = document.getElementById("empty");
+
+function criarCard(item) {
+  const card = document.createElement("article");
+  card.className = "card";
+
+  const poster = document.createElement("div");
+  poster.className = "poster " + item.cor;
+  poster.textContent = item.icone;
+
+  const info = document.createElement("div");
+  info.className = "info";
+
+  const titulo = document.createElement("h3");
+  titulo.textContent = item.nome;
+
+  const descricao = document.createElement("p");
+  descricao.textContent = item.genero + " · " + item.descricao;
+
+  const botao = document.createElement("button");
+  botao.textContent = "▶ Assistir demonstração";
+  botao.onclick = () => abrirPlayer(item.nome);
+
+  info.append(titulo, descricao, botao);
+  card.append(poster, info);
+
+  return card;
+}
+
+function renderizar() {
+  const termo = search.value.trim().toLowerCase();
+  const tipo = category.value;
+
+  const filtrados = conteudos.filter(item => {
+    const correspondeTexto =
+      item.nome.toLowerCase().includes(termo) ||
+      item.genero.toLowerCase().includes(termo);
+
+    const correspondeTipo =
+      tipo === "todos" || item.tipo === tipo;
+
+    return correspondeTexto && correspondeTipo;
+  });
+
+  grid.replaceChildren(...filtrados.map(criarCard));
+  empty.style.display = filtrados.length ? "none" : "block";
+
+  const canaisFiltrados = canais.filter(item => {
+    const correspondeTexto =
+      item.nome.toLowerCase().includes(termo) ||
+      item.genero.toLowerCase().includes(termo);
+
+    const correspondeTipo =
+      tipo === "todos" || tipo === "canal";
+
+    return correspondeTexto && correspondeTipo;
+  });
+
+  channelGrid.replaceChildren(...canaisFiltrados.map(criarCard));
+}
+
+function abrirPlayer(titulo) {
+  document.getElementById("playerTitle").textContent = titulo;
+
+  const video = document.getElementById("video");
+  video.src = videoDemo;
+  video.load();
+
+  document.getElementById("modal").classList.add("open");
+}
+
+function fecharPlayer() {
+  const video = document.getElementById("video");
+  video.pause();
+  video.removeAttribute("src");
+  video.load();
+
+  document.getElementById("modal").classList.remove("open");
+}
+
+function irCatalogo() {
+  document.getElementById("catalogo").scrollIntoView({
+    behavior: "smooth"
+  });
+}
+
+search.addEventListener("input", renderizar);
+category.addEventListener("change", renderizar);
+
+document.getElementById("modal").addEventListener("click", event => {
+  if (event.target.id === "modal") {
+    fecharPlayer();
+  }
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") {
+    fecharPlayer();
+  }
+});
+
+renderizar();
+</script>
+
+</body>
+</html>
