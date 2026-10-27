@@ -512,32 +512,39 @@ function renderizar() {
   const termo = search.value.trim().toLowerCase();
   const tipo = category.value;
 
-  const filtrados = conteudos.filter(item => {
-    const correspondeTexto =
-      item.nome.toLowerCase().includes(termo) ||
-      item.genero.toLowerCase().includes(termo);
+  const correspondeTexto = (item) => {
+    const nome = (item.nome || "").toLowerCase();
+    const genero = (item.genero || "").toLowerCase();
+    const descricao = (item.descricao || "").toLowerCase();
 
+    return (
+      nome.includes(termo) ||
+      genero.includes(termo) ||
+      descricao.includes(termo)
+    );
+  };
+
+  const filtrados = conteudos.filter((item) => {
     const correspondeTipo =
       tipo === "todos" || item.tipo === tipo;
 
-    return correspondeTexto && correspondeTipo;
+    return correspondeTipo && correspondeTexto(item);
   });
 
-  grid.replaceChildren(...filtrados.map(criarCard));
-  empty.style.display = filtrados.length ? "none" : "block";
-
-  const canaisFiltrados = canais.filter(item => {
-    const correspondeTexto =
-      item.nome.toLowerCase().includes(termo) ||
-      item.genero.toLowerCase().includes(termo);
-
+  const canaisFiltrados = canais.filter((item) => {
     const correspondeTipo =
       tipo === "todos" || tipo === "canal";
 
-    return correspondeTexto && correspondeTipo;
+    return correspondeTipo && correspondeTexto(item);
   });
 
+  grid.replaceChildren(...filtrados.map(criarCard));
   channelGrid.replaceChildren(...canaisFiltrados.map(criarCard));
+
+  const temResultados =
+    filtrados.length > 0 || canaisFiltrados.length > 0;
+
+  empty.style.display = temResultados ? "none" : "block";
 }
 
 function abrirPlayer(titulo) {
